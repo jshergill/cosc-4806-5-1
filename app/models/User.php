@@ -30,7 +30,8 @@ class User
         $db = db_connect();
         $username = strtolower($username);
 
-        $stmt = $db->prepare('SELECT id, password FROM users WHERE username = :u');
+        $stmt = $db->prepare('SELECT id, password, is_admin FROM users WHERE username = :u');
+
         $stmt->execute([':u' => $username]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -44,6 +45,7 @@ class User
             $_SESSION['auth']     = 1;
             $_SESSION['username'] = ucwords($username);
             $_SESSION['user_id']  = $user_id;
+            $_SESSION['is_admin']  = $row['is_admin'];
             unset($_SESSION['failedAuth']);
         } else {
             $_SESSION['failedAuth'] = ($_SESSION['failedAuth'] ?? 0) + 1;

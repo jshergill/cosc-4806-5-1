@@ -29,9 +29,13 @@ if (!isset($_SESSION['auth'])) {
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/reminders">Reminders</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/reports">Reports</a>
-        </li>
+        <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin']): ?>
+            <li class="nav-item">
+                <a class="nav-link active" href="/reports">Reports</a>
+            </li>
+        <?php endif; ?>
+
+
         <li class="nav-item">
           <a class="nav-link" href="/about">About Me</a>
         </li>
