@@ -1,29 +1,18 @@
-<?php require_once 'app/views/templates/headerPublic.php'?>
+<?php require 'app/views/templates/headerPublic.php'; ?>
 <main role="main" class="container">
-    <div class="page-header" id="banner">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>You are not logged in</h1>
-            </div>
-        </div>
-    </div>
+	<h1>You are not logged in</h1>
 
-<div class="row">
-    <div class="col-sm-auto">
-		<form action="/login/verify" method="post" >
-		<fieldset>
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input required type="text" class="form-control" name="username">
-			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input required type="password" class="form-control" name="password">
-			</div>
-            <br>
-		    <button type="submit" class="btn btn-primary">Login</button>
-		</fieldset>
-		</form> 
-	</div>
-</div>
-    <?php require_once 'app/views/templates/footer.php' ?>
+	<form action="/login/verify" method="post">
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input required id="username" name="username" class="form-control" type="text">
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input required id="password" name="password" class="form-control" type="password">
+		</div>
+		<button class="btn btn-primary">Login</button><br><br>
+		Don’t have an account? <a href="/create">Create account</a>
+	</form>
+</main>
+<?php require 'app/views/templates/footer.php'; ?>

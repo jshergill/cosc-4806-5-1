@@ -1,50 +1,50 @@
 <?php
+class User
+{
+    public function test(){
+}
+    public function register(string $username, string $password): void
+    {
+        $db = db_connect();
+        $username = strtolower($username);
 
-class User {
+        // 1. username must be unique
+        $check = $db->prepare('SELECT 1 FROM users WHERE username = :u');
+        $check->execute([':u' => $username]);
+        if ($check->fetchColumn()) {
+            throw new Exception('Username already taken.');
+        }
 
-    public $username;
-    public $password;
-    public $auth = false;
+        // 2. hash the password
+        $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    public function __construct() {
-        
+        // 3. insert the new user
+        $add = $db->prepare(
+            'INSERT INTO users (username, password, created_at) VALUES (:u, :p, NOW())'
+        );
+        $add->execute([':u' => $username, ':p' => $hash]);
     }
 
-    public function test () {
-      $db = db_connect();
-      $statement = $db->prepare("select * from users;");
-      $statement->execute();
-      $rows = $statement->fetch(PDO::FETCH_ASSOC);
-      return $rows;
-    }
+    public function authenticate(string $username, string $password): void
+    {
+        $db = db_connect();
+        $username = strtolower($username);
 
-    public function authenticate($username, $password) {
-        /*
-         * if username and password good then
-         * $this->auth = true;
-         */
-		$username = strtolower($username);
-		$db = db_connect();
-        $statement = $db->prepare("select * from users WHERE username = :name;");
-        $statement->bindValue(':name', $username);
-        $statement->execute();
-        $rows = $statement->fetch(PDO::FETCH_ASSOC);
-		
-		if (password_verify($password, $rows['password'])) {
-			$_SESSION['auth'] = 1;
-			$_SESSION['username'] = ucwords($username);
-			unset($_SESSION['failedAuth']);
-			header('Location: /home');
-			die;
-		} else {
-			if(isset($_SESSION['failedAuth'])) {
-				$_SESSION['failedAuth'] ++; //increment
-			} else {
-				$_SESSION['failedAuth'] = 1;
-			}
-			header('Location: /login');
-			die;
-		}
-    }
+        $stmt = $db->prepare('SELECT password FROM users WHERE username = :u');
+        $stmt->execute([':u' => $username]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        if ($row && password_verify($password, $row['password'])) {
+            $_SESSION['auth']     = 1;
+            $_SESSION['username'] = ucwords($username);
+            unset($_SESSION['failedAuth']);
+            header('Location: /home');
+            exit;
+        }
+
+        // failed login
+        $_SESSION['failedAuth'] = ($_SESSION['failedAuth'] ?? 0) + 1;
+        header('Location: /login');
+        exit;
+    }
 }
