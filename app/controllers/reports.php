@@ -10,7 +10,10 @@ class Reports extends Controller
         }
 
         $db = db_connect();
-
+        
+        // 1. Get all reminders
+        $remindersStmt = $db->query('SELECT * FROM reminders');
+        $allReminders = $remindersStmt->fetchAll(PDO::FETCH_ASSOC);
         
 }
 }
