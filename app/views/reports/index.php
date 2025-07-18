@@ -27,6 +27,28 @@
     <h4 class="mt-5">Login Counts by Username</h4>
         <canvas id="loginChart" width="600" height="300"></canvas>
     </div>
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('loginChart').getContext('2d');
+        const loginChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: <?= json_encode(array_column($data['loginCounts'], 'username_attempted')) ?>,
+                datasets: [{
+                    label: 'Login Count',
+                    data: <?= json_encode(array_column($data['loginCounts'], 'total_logins')) ?>,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
 
 <?php require_once 'app/views/templates/footer.php'; ?>
