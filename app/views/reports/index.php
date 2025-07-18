@@ -19,6 +19,11 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+    <h4 class="mt-5">User with Most Reminders</h4>
+    <?php if ($data['mostReminders']): ?>
+        <p><strong><?= $data['mostReminders']['username'] ?></strong> with <?= $data['mostReminders']['total'] ?> reminders.</p>
+    <?php endif; ?>
+    
 
     
 
