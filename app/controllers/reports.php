@@ -26,6 +26,20 @@ class Reports extends Controller
         ');
         $mostReminders = $mostRemindersStmt->fetch(PDO::FETCH_ASSOC);
 
+        // 3. Total logins by username (successful only)
+        $loginCountsStmt = $db->query("
+            SELECT username_attempted, COUNT(*) AS total_logins
+            FROM login_logs
+            WHERE success = 1
+            GROUP BY username_attempted
+        ");
+        $loginCounts = $loginCountsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->view('reports/index', [
+            'allReminders'    => $allReminders,
+            'mostReminders'   => $mostReminders,
+            'loginCounts'     => $loginCounts
+        ]);
         
 }
 }
