@@ -30,21 +30,40 @@ class User
         $db = db_connect();
         $username = strtolower($username);
 
-        $stmt = $db->prepare('SELECT password FROM users WHERE username = :u');
+        $stmt = $db->prepare('SELECT id, password FROM users WHERE username = :u');
         $stmt->execute([':u' => $username]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        $success = 0;
+        $user_id = null;
+
         if ($row && password_verify($password, $row['password'])) {
+            $success = 1;
+            $user_id = $row['id'];
+
             $_SESSION['auth']     = 1;
             $_SESSION['username'] = ucwords($username);
+            $_SESSION['user_id']  = $user_id;
             unset($_SESSION['failedAuth']);
-            header('Location: /home');
-            exit;
+        } else {
+            $_SESSION['failedAuth'] = ($_SESSION['failedAuth'] ?? 0) + 1;
         }
 
-        // failed login
-        $_SESSION['failedAuth'] = ($_SESSION['failedAuth'] ?? 0) + 1;
-        header('Location: /login');
+        // ✅ Insert into login_logs table
+        $log = $db->prepare('INSERT INTO login_logs (user_id, username_attempted, success, created_at)
+                             VALUES (:uid, :uname, :success, NOW())');
+        $log->execute([
+            ':uid'    => $user_id,
+            ':uname'  => $username,
+            ':success'=> $success
+        ]);
+
+        if ($success) {
+            header('Location: /home');
+        } else {
+            header('Location: /login');
+        }
         exit;
     }
+
 }
