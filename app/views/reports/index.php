@@ -1,7 +1,7 @@
-<?php require_once 'app/views/templates/headerPrivate.php'; ?>
+<?php require_once 'app/views/templates/header.php'; ?>
 
 <div class="container mt-5">
-    <h2 class="mb-4">Admin Reports</h2>
+    <h2 class="mb-4">Reports</h2>
 
     <h4 class="mb-3">All Reminders</h4>
     <table class="table table-bordered">
