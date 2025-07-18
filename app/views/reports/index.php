@@ -24,7 +24,9 @@
         <p><strong><?= $data['mostReminders']['username'] ?></strong> with <?= $data['mostReminders']['total'] ?> reminders.</p>
     <?php endif; ?>
     
-
+    <h4 class="mt-5">Login Counts by Username</h4>
+        <canvas id="loginChart" width="600" height="300"></canvas>
+    </div>
     
 
 <?php require_once 'app/views/templates/footer.php'; ?>
