@@ -1,4 +1,4 @@
-<footer class="footer ">
+<footer class="footer text-center">
     <div>
         <p class="mb-0">
             Copyright &copy; <?= date('Y') ?>

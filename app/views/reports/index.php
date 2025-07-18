@@ -9,7 +9,6 @@
                 <thead class="table-light">
                     <tr>
                         <th>ID</th>
-                        <th>User ID</th>
                         <th>Subject</th>
                         <th>Created</th>
                     </tr>
@@ -18,7 +17,6 @@
                     <?php foreach ($data['allReminders'] as $r): ?>
                         <tr>
                             <td><?= $r['id'] ?></td>
-                            <td><?= $r['user_id'] ?></td>
                             <td><?= htmlspecialchars($r['subject']) ?></td>
                             <td><?= $r['created_at'] ?></td>
                         </tr>
